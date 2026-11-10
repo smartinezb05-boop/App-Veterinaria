@@ -1,4 +1,4 @@
-import type { Cita, EstadoCita } from "../types";
+import type { Cita, EstadoCita, NuevaCita } from "../types";
 
 const API_URL = "http://localhost:3000/api/citas";
 
@@ -19,5 +19,18 @@ export async function actualizarEstado(
 
   const resultado = await respuesta.json();
   if (!respuesta.ok) throw new Error(resultado.mensaje);
+  return resultado.cita;
+}
+
+export async function crearCita(cita: NuevaCita): Promise<Cita> {
+  const respuesta = await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(cita),
+  });
+
+  const resultado = await respuesta.json();
+  if (!respuesta.ok) throw new Error(resultado.mensaje || "Error al registrar la cita");
+  
   return resultado.cita;
 }
